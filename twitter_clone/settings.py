@@ -58,7 +58,11 @@ ROOT_URLCONF = "twitter_clone.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [
+            BASE_DIR / "templates",
+            BASE_DIR / "templates/pages",
+            BASE_DIR / "templates/tweets",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
