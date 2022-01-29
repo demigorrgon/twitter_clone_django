@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from .models import TweetModel
 from .forms import TweetForm
 
@@ -16,7 +16,6 @@ def tweet_view(request, tweet_id, *args, **kwargs) -> render:
 
 def tweets_list_json(request, *args, **kwargs) -> JsonResponse:
     query = TweetModel.objects.all()
-    print(query)
     serialize = [
         {"id": item.id, "content": item.content, "likes": 42} for item in query
     ]
@@ -36,6 +35,8 @@ def tweet_create_view(request, *args, **kwargs):
         obj.save()
         form = TweetForm()
         return JsonResponse(obj.serialize(), status=201)
-        # if redirect_to:
-        #     return redirect(redirect_to)
+
+    if form.errors:
+        return JsonResponse(form.errors, status=400)
+
     return render(request, "components/forms.html", context={"form": form})
