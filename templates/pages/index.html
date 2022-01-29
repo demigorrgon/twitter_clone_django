@@ -63,6 +63,10 @@
                             }
                         }
                     }
+                    else if (xhr.status === 401) {
+                        alert("Please login");
+                        window.location.href = "/login";
+                    }
                 }
                 xhr.onerror = () => {
                     alert('Yo chill')

@@ -1,5 +1,6 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
 from .models import TweetModel
 from .forms import TweetForm
 
@@ -28,10 +29,20 @@ def tweets_list_view(request, *args, **kwargs):
 
 
 def tweet_create_view(request, *args, **kwargs):
+    user = request.user
+    if not user.is_authenticated:
+        if request.accepts(
+            "application/json"
+        ):  # if unauthorized ajax call -> 401, else redirect
+            user = None
+            return JsonResponse({}, status=401)
+        return redirect(settings.LOGIN_URL)
+
     form = TweetForm(request.POST)
     # redirect_to = request.POST.get("next")
     if form.is_valid():
-        obj = form.save()
+        obj = form.save(commit=False)
+        obj.user = user
         obj.save()
         form = TweetForm()
         return JsonResponse(obj.serialize(), status=201)
