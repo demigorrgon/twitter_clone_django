@@ -6,7 +6,7 @@ class TweetModel(models.Model):
     User = get_user_model()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(max_length=300, blank=True, null=True)
-    image = models.FileField(upload_to="images/", blank=True, null=True)
+    # image = models.FileField(upload_to="images/", blank=True, null=True)
 
     class Meta:
         ordering = ["-id"]

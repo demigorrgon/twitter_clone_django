@@ -63,7 +63,7 @@
                             }
                         }
                     }
-                    else if (xhr.status === 401) {
+                    else if (xhr.status === 403) {
                         alert("Please login");
                         window.location.href = "/login";
                     }
@@ -88,7 +88,7 @@
                 xhr.open(method, url);
                 xhr.onload = () => {
                     const serverResponse = xhr.response;
-                    var listedItems = serverResponse.response;
+                    var listedItems = serverResponse;
                     var finalString = ""
                     for (var i = 0; i < listedItems.length; i++) {
                         var tweetObject = listedItems[i]

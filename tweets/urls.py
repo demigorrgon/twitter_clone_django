@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import tweet_view, tweets_list_view, tweets_list_json, tweet_create_view
+from .views import (
+    tweet_view,
+    tweets_list_view,
+    tweets_list_json,
+    tweet_create_view,
+)
 
 urlpatterns = [
     path("", tweets_list_view),
