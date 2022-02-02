@@ -11,8 +11,8 @@ from .views import (
 urlpatterns = [
     path("", tweets_list_view),
     path("tweets/", tweets_list_json),
-    path("tweets/<int:tweet_id>", tweet_view),
-    path("tweets/create", tweet_create_view),
-    path("tweets/<int:tweet_id>/delete", tweet_delete_view),
-    path("tweets/action", tweet_action_view),
+    path("tweets/<int:tweet_id>/", tweet_view),
+    path("tweets/create/", tweet_create_view),
+    path("tweets/<int:tweet_id>/delete/", tweet_delete_view),
+    path("tweets/action/", tweet_action_view),
 ]

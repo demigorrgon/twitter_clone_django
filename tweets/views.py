@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import TweetModel
 from .forms import TweetForm
-from .serializers import TweetSerializer, TweetActionSerializer
+from .serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
 
 
 def tweet_view_old(request, tweet_id, *args, **kwargs) -> render:
@@ -29,10 +29,11 @@ def tweet_view(request, tweet_id, *args, **kwargs) -> render:
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def tweet_create_view(request, *args, **kwargs):
-    serializer = TweetSerializer(data=request.POST or None)
+    serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)
+    # print(serializer.data)
     return Response({}, status=400)
 
 
@@ -56,20 +57,24 @@ def tweet_action_view(request, *args, **kwargs):
         queryset = TweetModel.objects.filter(id=tweet_id)
         if not queryset.exists():
             return Response({}, status=404)
-        print(queryset)
         obj = queryset.first()
         if action == "like":
             obj.likes.add(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=200)
         elif action == "unlike":
             obj.likes.remove(request.user)
-            # return Response({}, status=)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=200)
         elif action == "retweet":
             parent_obj = obj
             new_tweet = TweetModel.objects.create(
-                user=request.user, parent=parent_obj, content=content
+                user=request.user,
+                content=content,
+                parent=parent_obj,
             )
             serializer = TweetSerializer(new_tweet)
-            return Response(serializer.data, status=200)
+            return Response(serializer.data, status=201)
     return Response({"message": "Tweet action happened successfully"}, status=200)
 
 
