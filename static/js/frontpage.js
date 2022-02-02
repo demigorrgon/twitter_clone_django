@@ -92,13 +92,13 @@ function getCookie(name) {
     return cookieValue;
 }
 
-var likeHandler = (tweet_id, currentAmount) => {
+var handleTweetAction = (tweet_id, currentAmount, action) => {
     console.log(tweet_id, currentAmount)
     const url = "tweets/action"
     const method = "POST"
     const data = JSON.stringify({
         id: tweet_id,
-        action: "like"
+        action: action,
     });
     const xhr = new XMLHttpRequest();
     const csrftoken = getCookie('csrftoken');
@@ -116,12 +116,25 @@ var likeHandler = (tweet_id, currentAmount) => {
 }
 
 var likeButton = (tweetObject) => {
-    return "<button class='btn btn-primary' onclick='likeHandler(" + tweetObject.id + "," + tweetObject.likes + ")'>" + tweetObject.likes + " Likes</button>";
+    return "<button class='btn btn-primary' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"like"' + ")'>" + tweetObject.likes + " Likes</button>";
+}
+
+var dislikeButton = (tweetObject) => {
+    return "<button class='btn btn-outline-primary' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"dislike"' + ")'>" + "dislike</button>";
+}
+
+var retweetButton = (tweetObject) => {
+    return "<button class='btn btn-outline-success' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"retweet"' + ")'>" + "retweet</button>";
 }
 
 var formattedTweetElement = (tweetObject) => {
     var formattedTweet = "<div class='col-12 border-bottom mb-4 tweet' id='tweet-" + tweetObject.id + "'><p>" + tweetObject.content
-        + "</p><div class='btn-group'>" + likeButton(tweetObject) + "</div></div>";
+        + "</p><div class='btn-group'>"
+        + likeButton(tweetObject)
+        + dislikeButton(tweetObject)
+        + retweetButton(tweetObject)
+        +
+        "</div></div>";
     return formattedTweet;
 }
 

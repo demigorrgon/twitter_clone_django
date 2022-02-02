@@ -50,21 +50,26 @@ def tweet_action_view(request, *args, **kwargs):
     serializer = TweetActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
-        print(data)
         tweet_id = data.get("id")
         action = data.get("action")
+        content = data.get("content")
         queryset = TweetModel.objects.filter(id=tweet_id)
-        print(queryset)
         if not queryset.exists():
             return Response({}, status=404)
+        print(queryset)
         obj = queryset.first()
         if action == "like":
             obj.likes.add(request.user)
         elif action == "unlike":
             obj.likes.remove(request.user)
+            # return Response({}, status=)
         elif action == "retweet":
-            pass
-
+            parent_obj = obj
+            new_tweet = TweetModel.objects.create(
+                user=request.user, parent=parent_obj, content=content
+            )
+            serializer = TweetSerializer(new_tweet)
+            return Response(serializer.data, status=200)
     return Response({"message": "Tweet action happened successfully"}, status=200)
 
 
