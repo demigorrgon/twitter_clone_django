@@ -5,23 +5,12 @@ from .models import TweetModel
 TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
 
 
-class TweetCreateSerializer(serializers.Serializer):
-    id = serializers.SerializerMethodField(read_only=True)
-    content = serializers.SerializerMethodField(read_only=True)
+class TweetCreateSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = TweetModel
         fields = ["id", "content", "likes"]
-
-    def get_id(self, obj):
-        return obj.id
-
-    def get_content(self, obj):
-        content = obj.content
-        if obj.is_retweet:
-            content = obj.parent.content
-        return content
 
     def get_likes(self, obj):
         return obj.likes.count()

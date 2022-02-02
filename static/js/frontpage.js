@@ -120,7 +120,7 @@ var likeButton = (tweetObject) => {
 }
 
 var dislikeButton = (tweetObject) => {
-    return "<button class='btn btn-outline-primary' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"dislike"' + ")'>" + "dislike</button>";
+    return "<button class='btn btn-outline-primary' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"unlike"' + ")'>" + "dislike</button>";
 }
 
 var retweetButton = (tweetObject) => {
