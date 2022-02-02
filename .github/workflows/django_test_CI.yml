@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 env:
   SECRET_KEY: 'django-insecure-^7&=!i-(w6lw$$1$8tlwaq6@*7llc0rwxdyrx35qgiuz9dbqqf'
+  CODECOV_TOKEN: 'ae53b5c3-5fd0-4f1b-9d66-80a91a5a3576'
 
 jobs:
   build:
