@@ -58,7 +58,7 @@ const tweetsContainerElem = document.getElementById("tweets")
 var loadTweets = (tweetsElement) => {
     const xhr = new XMLHttpRequest();
     const method = 'GET';
-    const url = '/tweets/';
+    const url = '/api/tweets/';
     const responseType = 'json';
     xhr.responseType = responseType;
     xhr.open(method, url);
@@ -94,7 +94,7 @@ function getCookie(name) {
 
 var handleTweetAction = (tweet_id, currentAmount, action) => {
     console.log(tweet_id, currentAmount)
-    const url = "tweets/action"
+    const url = "/api/tweets/action"
     const method = "POST"
     const data = JSON.stringify({
         id: tweet_id,
