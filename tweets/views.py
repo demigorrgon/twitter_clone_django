@@ -57,7 +57,6 @@ def tweet_action_view(request, *args, **kwargs):
         queryset = TweetModel.objects.filter(id=tweet_id)
         if not queryset.exists():
             return Response({}, status=404)
-        print(queryset)
         obj = queryset.first()
         if action == "like":
             obj.likes.add(request.user)
@@ -75,7 +74,7 @@ def tweet_action_view(request, *args, **kwargs):
                 parent=parent_obj,
             )
             serializer = TweetSerializer(new_tweet)
-            return Response(serializer.data, status=200)
+            return Response(serializer.data, status=201)
     return Response({"message": "Tweet action happened successfully"}, status=200)
 
 
