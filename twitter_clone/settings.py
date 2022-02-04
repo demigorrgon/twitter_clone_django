@@ -40,13 +40,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "rest_framework",
+    "accounts",
+    "profiles",
     "tweets",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -124,16 +128,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = ""
+STATIC_ROOT = os.path.join(BASE_DIR, "static-root")
 
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = (os.path.join("static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r"^/api/.*$"
 
 DEFAULT_RENDERER_CLASSES = (
     [
@@ -141,17 +148,17 @@ DEFAULT_RENDERER_CLASSES = (
     ],
 )
 
+DEFAULT_AUTHENTICATION_CLASSES = ["rest_framework.authentication.SessionAuthentication"]
+
 if DEBUG:
     DEFAULT_RENDERER_CLASSES += (
         [
             "rest_framework.renderers.BrowsableAPIRenderer",
         ],
     )
+    DEFAULT_AUTHENTICATION_CLASSES += ["tweets.rest_api.DevAuthentication"]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-    ],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
     # "DEFAULT_RENDERER_CLASSES": [
     #     "rest_framework.renderers.JSONRenderer",
