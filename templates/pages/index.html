@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="text-center"> Actual tweets no Kapp </h1>
+<div class="row mb-20">
+    <div class="col-md-12 mx-auto col-10">
+        <form class="form" id="tweet-create-form" method="post" , action="/api/tweets/create">
+            {% csrf_token %}
+            <div class="d-none alert alert-danger" id="tweet-create-form-error"></div>
+            <input type="hidden" name="next" value="/" />
+            <textarea required="required" class="form-control" name="content"
+                placeholder="Tweet Something..."></textarea>
+            <button class="btn btn-primary" type="submit">Bonk</button>
+        </form>
+        <div id="tweets">
+            <div class="col">
+                <div class="col-md-4 mx-auto col-10">
+                    Kek
+                </div>
+            </div>
+        </div>
+
+        {% load static %}
+        <script src="{% static 'js/frontpage.js'%}" type="text/javascript"></script>
+        {% endblock %}
