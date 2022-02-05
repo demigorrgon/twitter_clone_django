@@ -94,7 +94,7 @@ function getCookie(name) {
 
 var handleTweetAction = (tweet_id, currentAmount, action) => {
     console.log(tweet_id, currentAmount)
-    const url = "/api/tweets/action"
+    const url = "/api/tweets/action/"
     const method = "POST"
     const data = JSON.stringify({
         id: tweet_id,

@@ -20,6 +20,6 @@ from tweets.views import tweets_list_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("tweets/", tweets_list_view),
+    path("", tweets_list_view),
     path("api/", include("tweets.urls")),
 ]

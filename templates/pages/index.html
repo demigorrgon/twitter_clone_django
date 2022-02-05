@@ -5,7 +5,7 @@
 <h1 class="text-center"> Actual tweets no Kapp </h1>
 <div class="row mb-20">
     <div class="col-md-12 mx-auto col-10">
-        <form class="form" id="tweet-create-form" method="post" , action="/api/tweets/create">
+        <form class="form" id="tweet-create-form" method="post" , action="/api/tweets/create/">
             {% csrf_token %}
             <div class="d-none alert alert-danger" id="tweet-create-form-error"></div>
             <input type="hidden" name="next" value="/" />
@@ -22,5 +22,5 @@
         </div>
 
         {% load static %}
-        <script src="{% static 'js/frontpage.js'%}" type="text/javascript"></script>
+        <script src="{% static 'frontpage.js'%}" type="text/javascript"></script>
         {% endblock %}

@@ -8,6 +8,9 @@ from .views import (
     tweet_delete_view,
 )
 
+"""
+ENDPOINT: /api/
+"""
 urlpatterns = [
     path("", tweets_list_view),
     path("tweets/", tweets_list_json),
