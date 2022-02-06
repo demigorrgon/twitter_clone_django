@@ -1,0 +1,20 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Login {% endblock %}
+
+{% block content %}
+<div class="col-10 col-md-4 mx-auto">
+    {% if form.errors %}
+    <!-- <p> Already logged in</p> -->
+    {% else %}
+    <p>Please login:</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type='submit' class='btn btn-secondary'>{% if btn_text %}
+            {{btn_text}} {% else %}Save{% endif %}</button>
+    </form>
+
+    {% endblock %}

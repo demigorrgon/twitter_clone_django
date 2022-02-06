@@ -41,7 +41,7 @@ var handleTweetCreateFormSubmit = (event) => {
         }
         else if (xhr.status === 403) {
             alert("Please login");
-            window.location.href = "/login";
+            window.location.href = "/account/login/";
         }
     }
     xhr.onerror = () => {
