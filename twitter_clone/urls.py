@@ -25,4 +25,5 @@ urlpatterns = [
     path("", tweets_list_view, name="frontpage"),
     path("api/", include("tweets.urls")),
     re_path(r"accounts?/", include("accounts.urls"), name="accounts"),
+    re_path(r"profiles?/", include("profiles.urls"), name="profiles"),
 ]

@@ -1,22 +1,21 @@
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.conf import settings
+from django.shortcuts import render, get_object_or_404
+
+# from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import TweetModel
-from .forms import TweetForm
 from .serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
 
 
-def tweet_view_old(request, tweet_id, *args, **kwargs) -> render:
-    query = get_object_or_404(TweetModel, pk=tweet_id)
-    # query = TweetModel.objects.get(id=tweet_id)
-    return render(
-        request,
-        "tweets/tweet.html",
-        context=({"id": query.id, "content": query.content}),
-    )
+# def tweet_view_old(request, tweet_id, *args, **kwargs) -> render:
+#     query = get_object_or_404(TweetModel, pk=tweet_id)
+#     # query = TweetModel.objects.get(id=tweet_id)
+#     return render(
+#         request,
+#         "tweets/tweet.html",
+#         context=({"id": query.id, "content": query.content}),
+#     )
 
 
 @api_view(["GET"])
@@ -53,7 +52,6 @@ def tweet_action_view(request, *args, **kwargs):
         data = serializer.validated_data
         tweet_id = data.get("id")
         action = data.get("action")
-        content = data.get("content")
         queryset = TweetModel.objects.filter(id=tweet_id)
         if not queryset.exists():
             return Response({}, status=404)
@@ -68,57 +66,61 @@ def tweet_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=200)
         elif action == "retweet":
             parent_obj = obj
+            parent_content = parent_obj.content
             new_tweet = TweetModel.objects.create(
                 user=request.user,
-                content=content,
+                content=parent_content,
                 parent=parent_obj,
             )
             serializer = TweetSerializer(new_tweet)
+            print(serializer.data)
             return Response(serializer.data, status=201)
-    return Response({"message": "Tweet action happened successfully"}, status=200)
+    return Response({"message": "Invalid data has been provided"}, status=403)
 
 
 @api_view(["GET"])
 def tweets_list_json(request, *args, **kwargs) -> Response:
     queryset = TweetModel.objects.all()
+    print(queryset)
     serializer = TweetSerializer(queryset, many=True)
+    print(serializer.data)
     return Response(serializer.data)
 
 
-def tweets_list_json_old(request, *args, **kwargs) -> JsonResponse:
-    query = TweetModel.objects.all()
-    serialize = [
-        {"id": item.id, "content": item.content, "likes": 42} for item in query
-    ]
-    json_response = {"response": serialize}
-    return JsonResponse(json_response)
+# def tweets_list_json_old(request, *args, **kwargs) -> JsonResponse:
+#     query = TweetModel.objects.all()
+#     serialize = [
+#         {"id": item.id, "content": item.content, "likes": 42} for item in query
+#     ]
+#     json_response = {"response": serialize}
+#     return JsonResponse(json_response)
 
 
 def tweets_list_view(request, *args, **kwargs):
     return render(request, "pages/index.html")
 
 
-def tweet_create_view_old(request, *args, **kwargs):
-    # print(request.META)  # woah
-    user = request.user
-    if not user.is_authenticated:
-        if request.accepts(
-            "application/json"
-        ):  # if unauthorized ajax call -> 401, else redirect
-            user = None
-            return JsonResponse({}, status=401)
-        return redirect(settings.LOGIN_URL)
+# def tweet_create_view_old(request, *args, **kwargs):
+#     # print(request.META)  # woah
+#     user = request.user
+#     if not user.is_authenticated:
+#         if request.accepts(
+#             "application/json"
+#         ):  # if unauthorized ajax call -> 401, else redirect
+#             user = None
+#             return JsonResponse({}, status=401)
+#         return redirect(settings.LOGIN_URL)
 
-    form = TweetForm(request.POST)
-    # redirect_to = request.POST.get("next")
-    if form.is_valid():
-        obj = form.save(commit=False)
-        obj.user = user
-        obj.save()
-        form = TweetForm()
-        return JsonResponse(obj.serialize(), status=201)
+#     form = TweetForm(request.POST)
+#     # redirect_to = request.POST.get("next")
+#     if form.is_valid():
+#         obj = form.save(commit=False)
+#         obj.user = user
+#         obj.save()
+#         form = TweetForm()
+#         return JsonResponse(obj.serialize(), status=201)
 
-    if form.errors:
-        return JsonResponse(form.errors, status=400)
+#     if form.errors:
+#         return JsonResponse(form.errors, status=400)
 
-    return render(request, "components/forms.html", context={"form": form})
+#     return render(request, "components/forms.html", context={"form": form})

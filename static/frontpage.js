@@ -65,6 +65,7 @@ var loadTweets = (tweetsElement) => {
     xhr.onload = () => {
         const serverResponse = xhr.response;
         var listedItems = serverResponse;
+        console.log(listedItems)
         var finalString = ""
         for (var i = 0; i < listedItems.length; i++) {
             var tweetObject = listedItems[i]
@@ -128,13 +129,12 @@ var retweetButton = (tweetObject) => {
 }
 
 var formattedTweetElement = (tweetObject) => {
-    var formattedTweet = "<div class='col-12 border-bottom mb-4 tweet' id='tweet-" + tweetObject.id + "'><p>" + tweetObject.content
-        + "</p><div class='btn-group'>"
+    var formattedTweet = "<div class='col-12 border-bottom mb-4 tweet' id='tweet-" + tweetObject.id + "'><p>" + "@" + tweetObject.username + " tweeted: <br>" + tweetObject.content
+        + "</p>" + "<div class='btn-group'>"
         + likeButton(tweetObject)
         + dislikeButton(tweetObject)
         + retweetButton(tweetObject)
-        +
-        "</div></div>";
+        + "</div></div>";
     return formattedTweet;
 }
 

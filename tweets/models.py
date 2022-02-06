@@ -28,7 +28,7 @@ class TweetModel(models.Model):
         return self.parent is not None
 
     # def __str__(self):
-    #     return self.content
+    #     return self.user
 
     def serialize(self):
         return {"id": self.id, "content": self.content, "likes": 42}
