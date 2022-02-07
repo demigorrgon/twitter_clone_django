@@ -94,7 +94,6 @@ function getCookie(name) {
 }
 
 var handleTweetAction = (tweet_id, currentAmount, action) => {
-    console.log(tweet_id, currentAmount)
     const url = "/api/tweets/action/"
     const method = "POST"
     const data = JSON.stringify({
@@ -116,6 +115,34 @@ var handleTweetAction = (tweet_id, currentAmount, action) => {
     return
 }
 
+var handleFollowAction = (profileUser, action) => {
+    const url = "/api/profiles/" + profileUser + "/follow/"
+    const method = "POST"
+    console.log(profileUser)
+    const data = JSON.stringify({
+        username: profileUser,
+        action: action,
+    });
+    const xhr = new XMLHttpRequest();
+    const csrftoken = getCookie('csrftoken');
+    xhr.open(method, url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+    xhr.onload = () => {
+        console.log(xhr.status, xhr.response)
+        loadTweets(tweetsContainerElem);
+    }
+    xhr.send(data);
+    return
+}
+
+var onClickEventFormatter = (tweetObject) => {
+    username = tweetObject.username;
+    return username
+}
+
 var likeButton = (tweetObject) => {
     return "<button class='btn btn-primary' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"like"' + ")'>" + tweetObject.likes + " Likes</button>";
 }
@@ -128,14 +155,19 @@ var retweetButton = (tweetObject) => {
     return "<button class='btn btn-outline-success' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"retweet"' + ")'>" + "retweet</button>";
 }
 
+var followButton = (tweetObject) => {
+
+    return "<button class='btn btn-outline-primary' id='followBtn' onclick='handleFollowAction(\"" + tweetObject.username + "\"" + ", " + '"follow"' + ") '>" + "Follow </button>";
+}
+
 var formattedTweetElement = (tweetObject) => {
-    var formattedTweet = "<div class='col-12 border-bottom mb-4 tweet' id='tweet-" + tweetObject.id + "'><p>" + "@" + tweetObject.username + " tweeted: <br>" + tweetObject.content
+    var formattedTweet = "<div class='col-12 border-bottom mb-4 tweet' id='tweet-" + tweetObject.id + "'>" + "@" + tweetObject.username + "<br>" + "<div class='btn-group'>" + followButton(tweetObject) + "</div>" + "<br>tweeted: <br>" + tweetObject.content
         + "</p>" + "<div class='btn-group'>"
         + likeButton(tweetObject)
         + dislikeButton(tweetObject)
         + retweetButton(tweetObject)
         + "</div></div>";
-    return formattedTweet;
+    return formattedTweet
 }
 
 loadTweets(tweetsContainerElem);
