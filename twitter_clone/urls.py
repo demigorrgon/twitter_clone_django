@@ -23,7 +23,8 @@ from tweets.views import tweets_list_view
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", tweets_list_view, name="frontpage"),
-    path("api/", include("tweets.urls")),
+    path("api/", include("tweets.api.urls")),
     re_path(r"accounts?/", include("accounts.urls"), name="accounts"),
-    re_path(r"profiles?/", include("profiles.urls"), name="profiles"),
+    # re_path(r'profiles?/')
+    re_path(r"api/profiles?/", include("profiles.urls"), name="profiles"),
 ]
