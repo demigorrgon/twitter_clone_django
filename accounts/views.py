@@ -46,7 +46,7 @@ def registration_view(request, *args, **kwargs):
         user.set_password(form.cleaned_data["password1"])
         login(request, user)
         messages.success(request, "Registered Successfully")
-        return reverse("frontpage")
+        return redirect(reverse("frontpage"))
 
     context = {"form": form, "btn_text": "Register"}
     return render(request, "accounts/register.html", context)
