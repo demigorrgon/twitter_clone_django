@@ -1,5 +1,5 @@
 # twitter_clone_django
-twitter-like app for learning using ```django```, ```Django Rest Framework```, Bootstrap and vanilla js
+twitter-like app for learning using ```django```, ```Django Rest Framework```, Bootstrap and vanilla js based on https://www.youtube.com/watch?v=f1R_bykXHGE&t=16683s and [Learn Django 3 by example](https://www.amazon.com/Django-Example-powerful-reliable-applications/dp/1838981950)
 
  - All views are function-based
 
