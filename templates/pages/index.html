@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 
+{% block title %} Tweetor {% endblock %}
+
 {% block content %}
 
-<h1 class="text-center"> Actual tweets no Kapp </h1>
+{% if messages %}
+<div class="alert alert-success" role="alert">
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+</div>
+{% endif %}
+<h1 class="text-center"> Actual tweets </h1>
 <div class="row mb-20">
     <div class="col-md-12 mx-auto col-10">
         <form class="form" id="tweet-create-form" method="post" , action="/api/tweets/create/">
@@ -18,6 +27,7 @@
                 <div class="col-md-4 mx-auto col-10">
                     Kek
                 </div>
+
             </div>
         </div>
 

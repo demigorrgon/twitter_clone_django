@@ -1,0 +1,10 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <p>{% if description %} {{description}} {%endif %}</p>
+    <button type='submit' class='btn btn-secondary'>{% if btn_text %}
+        {{btn_text}} {% else %}Save{% endif %}</button>
+</form>
+{% endblock %}

@@ -38,7 +38,7 @@ class TweetsTestCase(TestCase):
 
     def test_tweet_list(self):
         client = self.get_client()
-        response = client.get("/tweets/")
+        response = client.get("/")
         self.assertEqual(response.status_code, 200)
 
     def test_tweet_create_view(self):
