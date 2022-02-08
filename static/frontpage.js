@@ -145,7 +145,7 @@ var handleTweetAction = (tweet_id, currentAmount, action) => {
 var handleFollowAction = (profileUser, action) => {
     const url = "/api/profiles/" + profileUser + "/follow/"
     const method = "POST"
-    console.log(profileUser)
+    // console.log(profileUser)
     const data = JSON.stringify({
         username: profileUser,
         action: action,
@@ -158,9 +158,10 @@ var handleFollowAction = (profileUser, action) => {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('X-CSRFToken', csrftoken);
     xhr.onload = () => {
-        // console.log(xhr.status, xhr.response)
-        loadTweets(tweetsContainerElem);
+        console.log(xhr.status, xhr.response)
+        window.location.href = '/';
     }
+
     xhr.send(data);
     return
 }
@@ -199,7 +200,7 @@ var nextPageButton = () => {
 }
 
 var formattedTweetElement = (tweetObject) => {
-    var formattedTweet = "<div class='col-12 border-bottom mb-4 tweet' id='tweet-" + tweetObject.id + "'>" + "@" + tweetObject.username + "<br>" + "<div class='btn-group'>" + followButton(tweetObject) + "</div>" + "<br>tweeted: <br>" + tweetObject.content
+    var formattedTweet = "<div class='col-12 border mb-4 tweet' id='tweet-" + tweetObject.id + "'>" + "@" + tweetObject.username + "<br>" + "<div class='btn-group'>" + followButton(tweetObject) + "</div>" + "<br>tweeted: <br>" + tweetObject.content
         + "</p>" + "<div class='btn-group'>"
         + likeButton(tweetObject)
         + dislikeButton(tweetObject)
