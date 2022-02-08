@@ -16,6 +16,16 @@ def tweet_view(request, tweet_id, *args, **kwargs) -> render:
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+def tweet_feed_view(request, *args, **kwargs):
+    paginator = PageNumberPagination()
+    paginator.page_size = 10
+    queryset = TweetModel.objects.all()
+    paginated_queryset = paginator.paginate_queryset(queryset, request)
+    serializer = TweetSerializer(paginated_queryset, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def tweet_create_view(request, *args, **kwargs):
