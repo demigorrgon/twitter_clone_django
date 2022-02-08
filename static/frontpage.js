@@ -55,27 +55,54 @@ tweetCreateForm.addEventListener('submit', handleTweetCreateFormSubmit);
 
 const tweetsContainerElem = document.getElementById("tweets")
 
-var loadTweets = (tweetsElement) => {
+var loadTweets = (tweetsElement, nextPage) => {
+    // TODO: load tweets from next page
     const xhr = new XMLHttpRequest();
     const method = 'GET';
-    const url = '/api/tweets/';
+
+    if (nextPage !== undefined) {
+        const url = nextPage;
+        const responseType = 'json';
+        xhr.responseType = responseType;
+        xhr.open(method, url);
+        xhr.onload = () => {
+            const serverResponse = xhr.response;
+            // console.log(serverResponse)
+            var listedItems = serverResponse.results;
+            // console.log(serverResponse, listedItems)
+            var finalString = ""
+            for (var i = 0; i < listedItems.length; i++) {
+                var tweetObject = listedItems[i]
+                var currentItem = formattedTweetElement(tweetObject)
+                finalString += currentItem
+
+            }
+            finalString += nextPageButton()
+            tweetsElement.innerHTML = finalString
+        }
+    }
+
+    const url = `/api/tweets/feed/`;
     const responseType = 'json';
     xhr.responseType = responseType;
     xhr.open(method, url);
     xhr.onload = () => {
         const serverResponse = xhr.response;
-        var listedItems = serverResponse;
-        console.log(listedItems)
+        var listedItems = serverResponse.results;
         var finalString = ""
         for (var i = 0; i < listedItems.length; i++) {
             var tweetObject = listedItems[i]
             var currentItem = formattedTweetElement(tweetObject)
             finalString += currentItem
+
         }
+        finalString += nextPageButton()
         tweetsElement.innerHTML = finalString
     }
     xhr.send();
+
 }
+
 
 function getCookie(name) {
     let cookieValue = null;
@@ -108,7 +135,7 @@ var handleTweetAction = (tweet_id, currentAmount, action) => {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('X-CSRFToken', csrftoken);
     xhr.onload = () => {
-        console.log(xhr.status, xhr.response)
+        // console.log(xhr.status, xhr.response)
         loadTweets(tweetsContainerElem);
     }
     xhr.send(data);
@@ -131,7 +158,7 @@ var handleFollowAction = (profileUser, action) => {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('X-CSRFToken', csrftoken);
     xhr.onload = () => {
-        console.log(xhr.status, xhr.response)
+        // console.log(xhr.status, xhr.response)
         loadTweets(tweetsContainerElem);
     }
     xhr.send(data);
@@ -142,6 +169,15 @@ var onClickEventFormatter = (tweetObject) => {
     username = tweetObject.username;
     return username
 }
+
+// var getNextPage = () => {
+//     $.ajax({
+//         url: '/api/tweets/feed/', success: function (result) {
+//             console.log(result)
+//         }
+//     })
+//     // loadTweets(tweetsContainerElem);
+// }
 
 var likeButton = (tweetObject) => {
     return "<button class='btn btn-primary' onclick='handleTweetAction(" + tweetObject.id + "," + tweetObject.likes + "," + '"like"' + ")'>" + tweetObject.likes + " Likes</button>";
@@ -156,8 +192,10 @@ var retweetButton = (tweetObject) => {
 }
 
 var followButton = (tweetObject) => {
-
     return "<button class='btn btn-outline-primary' id='followBtn' onclick='handleFollowAction(\"" + tweetObject.username + "\"" + ", " + '"follow"' + ") '>" + "Follow </button>";
+}
+var nextPageButton = () => {
+    return "<div class ='btn-group'>" + "<button class='btn btn-outline-primary' id='nextpageBtn'" + `onclick='loadTweets(tweetsContainerElem, getNextPage())'>Next Page</button></div>`
 }
 
 var formattedTweetElement = (tweetObject) => {
@@ -171,3 +209,6 @@ var formattedTweetElement = (tweetObject) => {
 }
 
 loadTweets(tweetsContainerElem);
+
+
+// console.log(getNextPage())
